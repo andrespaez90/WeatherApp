@@ -17,6 +17,8 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.xml.sax.XMLReader;
+import org.xmlpull.v1.XmlPullParser;
 
 import andres.dev.com.weatherapp.Model.CityInformation;
 import andres.dev.com.weatherapp.Model.Weather;
@@ -70,8 +72,7 @@ public class CityWeather extends ActionBarActivity {
         City = Information.currentCity;
         Picasso.with(this).load(City.urlImage).placeholder(R.drawable.cityload).into(imageCity);
         cityName.setText(City.cityName);
-        if(City.JSON)
-            new DownloadData().execute();
+        new DownloadData().execute();
     }
 
 
@@ -98,17 +99,20 @@ public class CityWeather extends ActionBarActivity {
 
         protected String doInBackground(Pair<String,String>...data){
             try{
-
-                String result = ServerConnection.requestPOST(Information.currentCity.sourceData, data);
-                //publishProgress(result);
-                JSONObject jsonObject = new JSONObject(result);
-
-                JSONArray jsonArray = (((jsonObject.getJSONObject("query")).getJSONObject("results")).getJSONObject("channel")).getJSONObject("item").getJSONArray("forecast");
-                //publishProgress(jsonArray.toString());
-                Information.currentCity.addForecast(jsonArray);
-
-                return "Success";
-
+                if(Information.currentCity.JSON) {
+                    String result = ServerConnection.requestPOST(Information.currentCity.sourceData, data);
+                    //publishProgress(result);
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = (((jsonObject.getJSONObject("query")).getJSONObject("results")).getJSONObject("channel")).getJSONObject("item").getJSONArray("forecast");
+                    //publishProgress(jsonArray.toString());
+                    Information.currentCity.addForecast(jsonArray);
+                    return "Success";
+                }
+                else{
+                    XmlPullParser parse = ServerConnection.requestXML(Information.currentCity.sourceData);
+                    Information.currentCity.addForecast(parse);
+                    return "Success";
+                }
             }
             catch (Exception e) {
                 Log.d("ReadWeatherJSONFeedTask", e.getMessage());

@@ -4,6 +4,10 @@ import android.net.Uri;
 import android.util.Log;
 import android.util.Pair;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -36,6 +40,29 @@ public class ServerConnection {
 
     }
 
+    public static XmlPullParser requestXML(String url){
+        try {
+            URL service = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) service.openConnection();
+            connection.connect();
+            InputStream in = connection.getInputStream();
+            return (readXML(in));
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
+
+    private static XmlPullParser readXML(InputStream inputStream) throws XmlPullParserException {
+        XmlPullParserFactory pullParserFactory;
+        pullParserFactory = XmlPullParserFactory.newInstance();
+        XmlPullParser  parser = pullParserFactory.newPullParser();
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+        parser.setInput(inputStream, null);
+        return parser;
+    }
 
 
     private static StringBuilder readJSON(InputStream inputStream) throws IOException {
@@ -49,5 +76,6 @@ public class ServerConnection {
         inputStream.close();
         return stringBuilder;
     }
+
 
 }
