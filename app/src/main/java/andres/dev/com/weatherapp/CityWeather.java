@@ -19,8 +19,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import andres.dev.com.weatherapp.Model.CityInformation;
+import andres.dev.com.weatherapp.Model.Weather;
 import andres.dev.com.weatherapp.Provider.Information;
 import andres.dev.com.weatherapp.Provider.ServerConnection;
+import andres.dev.com.weatherapp.Provider.TemperatureConverter;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -34,9 +36,27 @@ public class CityWeather extends ActionBarActivity {
 
     @InjectView(R.id.wh_cityImage)
     ImageView imageCity;
-
     @InjectView(R.id.wh_date)
     TextView dateWeather;
+    @InjectView(R.id.forecast_today_max)
+    TextView todayMax;
+    @InjectView(R.id.forecast_today_min)
+    TextView todayMin;
+
+    @InjectView(R.id.tomorrow_date)
+    TextView tomorrowDate;
+    @InjectView(R.id.forecast_tomorrow_max)
+    TextView tomorrowMax;
+    @InjectView(R.id.forecast_tomorrow_min)
+    TextView tomorrowMin;
+
+    @InjectView(R.id.lastday_date)
+    TextView lastDayDate;
+    @InjectView(R.id.forecast_lastday_max)
+    TextView lastDayMax;
+    @InjectView(R.id.forecast_lastday_min)
+    TextView lastDayMin;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +77,20 @@ public class CityWeather extends ActionBarActivity {
 
     private void updateInfo(){
         City =  Information.currentCity;
-        dateWeather.setText(City.Forecast.get(0).Date);
+        Weather w = City.Forecast.get(0);
+        dateWeather.setText(w.Date);
+        todayMax.setText(TemperatureConverter.FahrenheittoCelsius(w.TempMax)+" C");
+        todayMin.setText(TemperatureConverter.FahrenheittoCelsius(w.TempMin)+" C");
+
+        w = City.Forecast.get(1);
+        tomorrowDate.setText(w.Date);
+        tomorrowMax.setText(TemperatureConverter.FahrenheittoCelsius(w.TempMax)+" C");
+        tomorrowMin.setText(TemperatureConverter.FahrenheittoCelsius(w.TempMin)+" C");
+
+        w = City.Forecast.get(2);
+        lastDayDate.setText(w.Date);
+        lastDayMax.setText(TemperatureConverter.FahrenheittoCelsius(w.TempMax)+" C");
+        lastDayMin.setText(TemperatureConverter.FahrenheittoCelsius(w.TempMin)+" C");
     }
 
 
@@ -67,11 +100,11 @@ public class CityWeather extends ActionBarActivity {
             try{
 
                 String result = ServerConnection.requestPOST(Information.currentCity.sourceData, data);
-                publishProgress(result);
+                //publishProgress(result);
                 JSONObject jsonObject = new JSONObject(result);
 
                 JSONArray jsonArray = (((jsonObject.getJSONObject("query")).getJSONObject("results")).getJSONObject("channel")).getJSONObject("item").getJSONArray("forecast");
-                publishProgress(jsonArray.toString());
+                //publishProgress(jsonArray.toString());
                 Information.currentCity.addForecast(jsonArray);
 
                 return "Success";
