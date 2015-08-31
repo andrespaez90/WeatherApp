@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 
 import andres.dev.com.weatherapp.Adapter.recycleAdapter;
+import andres.dev.com.weatherapp.Model.CityInformation;
 import andres.dev.com.weatherapp.Provider.Information;
 import andres.dev.com.weatherapp.Uties.TAGs.ActivityTags;
 import butterknife.ButterKnife;
@@ -20,7 +21,7 @@ public class MainActivity extends ActionBarActivity {
     @InjectView(R.id.main_recView)
     RecyclerView cityList;
 
-    ArrayList<Information.CityInformation> list = Information.getInstance();
+    ArrayList<CityInformation> list = Information.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

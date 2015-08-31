@@ -33,5 +33,13 @@
         android:scaleType="centerCrop"
         android:src="@mipmap/ic_launcher" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Actualizando ..."
+        android:gravity="center"
+        android:id="@+id/wh_date" />
+
 
 </LinearLayout>

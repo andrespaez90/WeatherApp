@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import andres.dev.com.weatherapp.CityWeather;
+import andres.dev.com.weatherapp.Model.CityInformation;
 import andres.dev.com.weatherapp.Provider.Information;
 import andres.dev.com.weatherapp.R;
 
@@ -22,11 +23,11 @@ import andres.dev.com.weatherapp.R;
  */
 public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.DataViewHolder> {
 
-    private ArrayList<Information.CityInformation> visibleItems;
-    private ArrayList<Information.CityInformation> allItems;
+    private ArrayList<CityInformation> visibleItems;
+    private ArrayList<CityInformation> allItems;
     private Context mContext;
 
-    public recycleAdapter(ArrayList<Information.CityInformation> data, Context context){
+    public recycleAdapter(ArrayList<CityInformation> data, Context context){
         mContext = context;
         allItems = data;
         flushFilter();
@@ -47,7 +48,7 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.DataView
 
     @Override
     public void onBindViewHolder(DataViewHolder data, int i) {
-        Information.CityInformation item = visibleItems.get(i);
+        CityInformation item = visibleItems.get(i);
         data.bindItem(item);
     }
 
@@ -57,15 +58,15 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.DataView
     }
 
     public void flushFilter(){
-        visibleItems = new ArrayList<Information.CityInformation>();
+        visibleItems = new ArrayList<CityInformation>();
         visibleItems.addAll(allItems);
         notifyDataSetChanged();
     }
 
     public void setFilter(String queryText) {
 
-        visibleItems = new ArrayList<Information.CityInformation>();
-        for (Information.CityInformation item: allItems) {
+        visibleItems = new ArrayList<CityInformation>();
+        for (CityInformation item: allItems) {
             if (item.cityName.toLowerCase().contains(queryText))
                 visibleItems.add(item);
         }
@@ -80,7 +81,7 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.DataView
         private int mRowHeight;
 
         private Context mContext;
-        private Information.CityInformation city;
+        private CityInformation city;
 
         public DataViewHolder(View itemView, Context context) {
             super(itemView);
@@ -90,7 +91,7 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.DataView
             txtTitle = (TextView)itemView.findViewById(R.id.itemname);
         }
 
-        public void bindItem(Information.CityInformation item) {
+        public void bindItem(CityInformation item) {
             city = item;
             txtTitle.setText(city.cityName);
             Picasso.with(mContext).load(city.urlImage).placeholder(R.drawable.cityload).into(imageView);
